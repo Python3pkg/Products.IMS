@@ -145,7 +145,7 @@ class MessageView(BrowserView):
             self.context.reindexObject()
 
         context_state = getMultiAdapter((self.context, self.request),
-                                        name=u'plone_context_state')
+                                        name='plone_context_state')
 
         try: # Plone 4+
             self.message_actions = context_state.actions(category="message")
@@ -199,25 +199,25 @@ class INewMessageForm(Interface):
     """Define the fields of our form
     """
 
-    receiver = schema.Choice(title=_(u"To"),
+    receiver = schema.Choice(title=_("To"),
                              required=True,
                              source='ims.members')
 
-    subject = schema.TextLine(title=_(u"Subject"),
+    subject = schema.TextLine(title=_("Subject"),
                               required=True)
 
-    message = schema.Text(title=_(u"Message"),
+    message = schema.Text(title=_("Message"),
                           required=True)
 
 class NewMessageForm(formbase.PageForm):
     form_fields = form.FormFields(INewMessageForm)
-    label = _(u"New Message")
+    label = _("New Message")
 
     def __call__(self):
         mship = getToolByName(self.context, 'portal_membership')
         current_auth = mship.getAuthenticatedMember()
         if IApplication.providedBy(aq_parent(aq_parent(current_auth.getUser()))):
-            IStatusMessage(self.request).addStatusMessage(_(u"Unfortunately it is not possible to send messages using your user account. Please use a Plone user rather than a Zope user."), type='error')
+            IStatusMessage(self.request).addStatusMessage(_("Unfortunately it is not possible to send messages using your user account. Please use a Plone user rather than a Zope user."), type='error')
             return self.request.response.redirect(self.context.absolute_url())
         
         self.request.set('disable_border', True)
@@ -235,7 +235,7 @@ class NewMessageForm(formbase.PageForm):
 
         return super(NewMessageForm, self).__call__()
 
-    @form.action(_(u"send"))
+    @form.action(_("send"))
     def action_send(self, action, data):
         """Send the message
         """
@@ -246,13 +246,13 @@ class NewMessageForm(formbase.PageForm):
 
         message = imsmessage.sendMessage(data['subject'], data['message'], data['receiver'])
         if message:
-            IStatusMessage(self.request).addStatusMessage(_(u"Your message has been sent successfully"), type='info')
+            IStatusMessage(self.request).addStatusMessage(_("Your message has been sent successfully"), type='info')
             return self.request.response.redirect(message.absolute_url())
         else:
-            IStatusMessage(self.request).addStatusMessage(_(u"Sending your message failed"), type='error')
+            IStatusMessage(self.request).addStatusMessage(_("Sending your message failed"), type='error')
             return self.request.response.redirect(self.context.absolute_url())
 
-    @form.action(_(u"cancel"),validator=lambda *args, **kwargs: {})
+    @form.action(_("cancel"),validator=lambda *args, **kwargs: {})
     def action_cancel(self, action, data):
         """Cancel message-creation
         """
@@ -274,7 +274,7 @@ class NewContextMessageForm(NewMessageForm):
 
         return super(NewMessageForm, self).__call__()
 
-    @form.action(_(u"send"))
+    @form.action(_("send"))
     def action_send(self, action, data):
         """Send the message
         """
@@ -283,7 +283,7 @@ class NewContextMessageForm(NewMessageForm):
 
 class ReplyMessageForm(formbase.PageForm):
     form_fields = form.FormFields(INewMessageForm)
-    label = _(u"Reply to Message")
+    label = _("Reply to Message")
 
     template = ViewPageTemplateFile('templates/message_form.pt')
 
@@ -299,19 +299,19 @@ class ReplyMessageForm(formbase.PageForm):
 
         return super(ReplyMessageForm, self).__call__()
 
-    @form.action(_(u"reply"))
+    @form.action(_("reply"))
     def action_reply(self, action, data):
         """Reply to Message
         """
         message = self.context.replyToMessage(self.request.form.get('subject', data['subject']), data['message'])
         if message:
-            IStatusMessage(self.request).addStatusMessage(_(u"Your message has been sent successfully"), type='info')
+            IStatusMessage(self.request).addStatusMessage(_("Your message has been sent successfully"), type='info')
             return self.request.response.redirect(message.absolute_url())
         else:
-            IStatusMessage(self.request).addStatusMessage(_(u"Sending your message failed"), type='error')
+            IStatusMessage(self.request).addStatusMessage(_("Sending your message failed"), type='error')
             return self.request.response.redirect(self.context.absolute_url())
 
-    @form.action(_(u"cancel"),validator=lambda *args, **kwargs: {})
+    @form.action(_("cancel"),validator=lambda *args, **kwargs: {})
     def action_cancel(self, action, data):
         """Cancel message-creation
         """
@@ -326,7 +326,7 @@ class ReplyMessageForm(formbase.PageForm):
 
 class ForwardMessageForm(formbase.PageForm):
     form_fields = form.FormFields(INewMessageForm)
-    label = _(u"Forward Message")
+    label = _("Forward Message")
 
     template = ViewPageTemplateFile('templates/message_form.pt')
 
@@ -345,19 +345,19 @@ class ForwardMessageForm(formbase.PageForm):
 
         return super(ForwardMessageForm, self).__call__()
 
-    @form.action(_(u"forward"))
+    @form.action(_("forward"))
     def action_forward(self, action, data):
         """Forward Message
         """
         message = self.context.forwardMessage(self.request.form.get('subject', data['subject']), data['message'], data['receiver'])
         if message:
-            IStatusMessage(self.request).addStatusMessage(_(u"Your message has been sent successfully"), type='info')
+            IStatusMessage(self.request).addStatusMessage(_("Your message has been sent successfully"), type='info')
             return self.request.response.redirect(message.absolute_url())
         else:
-            IStatusMessage(self.request).addStatusMessage(_(u"Sending your message failed"), type='error')
+            IStatusMessage(self.request).addStatusMessage(_("Sending your message failed"), type='error')
             return self.request.response.redirect(self.context.absolute_url())
 
-    @form.action(_(u"cancel"),validator=lambda *args, **kwargs: {})
+    @form.action(_("cancel"),validator=lambda *args, **kwargs: {})
     def action_cancel(self, action, data):
         """Cancel message-creation
         """

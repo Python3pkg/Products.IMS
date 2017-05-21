@@ -24,7 +24,7 @@ MessageSchema = BaseContent.schema.copy() + Schema((
         name='sender',
         required=1,
         widget=StringWidget(
-            label=_('label_sender', default=u'Sent by'),
+            label=_('label_sender', default='Sent by'),
             visible=0,
         ),
     ),
@@ -33,7 +33,7 @@ MessageSchema = BaseContent.schema.copy() + Schema((
         name='receiver',
         required=1,
         widget=TextAreaWidget(
-            label=_('label_receiver', default=u'Received by'),
+            label=_('label_receiver', default='Received by'),
             visible=0,
         ),
     ),
@@ -42,7 +42,7 @@ MessageSchema = BaseContent.schema.copy() + Schema((
         name='message',
         required=1,
         widget=TextAreaWidget(
-            label=_('label_message', default=u'Message'),
+            label=_('label_message', default='Message'),
             visible=0,
         ),
     ),
@@ -53,7 +53,7 @@ MessageSchema = BaseContent.schema.copy() + Schema((
         allowed_types=('Message',),
         relationship='replyTo',
         widget=ReferenceWidget(
-            label=_('label_replyTo', default=u'Reply to'),
+            label=_('label_replyTo', default='Reply to'),
             visible=0,
         ),
     ),
@@ -64,7 +64,7 @@ MessageSchema = BaseContent.schema.copy() + Schema((
         allowed_types=('Message',),
         relationship='companion',
         widget=ReferenceWidget(
-            label=_('label_companion', default=u'Companio'),
+            label=_('label_companion', default='Companio'),
             visible=0,
         ),
     ),
@@ -72,7 +72,7 @@ MessageSchema = BaseContent.schema.copy() + Schema((
 ))
 
 for field in ('creators','allowDiscussion','contributors','location','subject','language','rights','effectiveDate','expirationDate',):
-    if MessageSchema.has_key(field):
+    if field in MessageSchema:
         MessageSchema[field].widget.visible = {'edit': 'invisible', 'view': 'invisible'}
 
 class Message(BaseContent):

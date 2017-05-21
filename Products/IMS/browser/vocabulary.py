@@ -7,7 +7,7 @@ def members(context):
         context = getSiteManager()
     mship = getToolByName(context, 'portal_membership')
     filter = getToolByName(context, 'portal_properties').site_properties.getProperty('ims_member_filter', ())
-    portal_state = getMultiAdapter((context, context.REQUEST), name=u'plone_portal_state')
+    portal_state = getMultiAdapter((context, context.REQUEST), name='plone_portal_state')
     member = portal_state.member()
     userid = member.getId()
     return SimpleVocabulary([SimpleTerm(m, m, mship.getMemberInfo(m).get('fullname', m).decode('UTF-8'))

@@ -39,7 +39,7 @@ def newMessageNotify(object, event):
             mailhost.secureSend(body,
                                 mto=mship.getMemberById(receiver).getProperty('email'),
                                 mfrom='%s <%s>' % (portal.getProperty('email_from_name', ''), portal.getProperty('email_from_address', '')),
-                                subject=translate(_(u'mail_subject', default=u'You have received a new message'), context=object.REQUEST),
+                                subject=translate(_('mail_subject', default='You have received a new message'), context=object.REQUEST),
                                 charset='utf-8')
         except:
             # no mailserver

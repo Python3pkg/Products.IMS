@@ -24,8 +24,8 @@ class IMSBarViewlet(ViewletBase):
         super(IMSBarViewlet, self).update()
 
         context_state = getMultiAdapter((self.context, self.request),
-                                        name=u'plone_context_state')
-        tools = getMultiAdapter((self.context, self.request), name=u'plone_tools')
+                                        name='plone_context_state')
+        tools = getMultiAdapter((self.context, self.request), name='plone_tools')
 
         try: # Plone 4+
             self.ims_actions = context_state.actions(category="ims")
@@ -34,7 +34,7 @@ class IMSBarViewlet(ViewletBase):
         for action in self.ims_actions:
             if action['id'] == 'receivedmessages':
                 catalog = getToolByName(self.context, 'portal_catalog')
-                portal_state = getMultiAdapter((self.context, self.request), name=u'plone_portal_state')
+                portal_state = getMultiAdapter((self.context, self.request), name='plone_portal_state')
                 member = portal_state.member()
                 action['unread'] = len(catalog(object_provides=IReceivedMessage.__identifier__, 
                                                path={'query': '%s/received' % '/'.join(mship.getHomeFolder(member.getId()).getPhysicalPath())},

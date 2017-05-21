@@ -52,7 +52,7 @@ class IMSMessage(object):
     def _getOwner(self, container):
         try:
             user = container.getWrappedOwner()
-        except AttributeError, e: # we have a zope rather than a plone user
+        except AttributeError as e: # we have a zope rather than a plone user
             owner = [u for u, roles in container.get_local_roles() if 'Owner' in roles][0]
             context = aq_inner(self.context)
             user = context.acl_users.getUserById(owner)
@@ -80,7 +80,7 @@ class IMSMessage(object):
             instance.reindexObject()
             newSecurityManager(self.context.REQUEST, current_auth)
             return instance
-        except Exception, e:
+        except Exception as e:
             return None
 
     def _getMessageFolder(self, userid, id, type_name):
@@ -108,7 +108,7 @@ class IMSMessage(object):
         """Send a IMS message
         """
         if sender is None:
-            portal_state = getMultiAdapter((self.context, self.context.REQUEST), name=u'plone_portal_state')
+            portal_state = getMultiAdapter((self.context, self.context.REQUEST), name='plone_portal_state')
             member = portal_state.member()
             sender = member.getId()
 
@@ -119,7 +119,7 @@ class IMSMessage(object):
         received = []
         for r in receiver:
             received.append(self._createMessage(self._getMessageFolder(r, 'received', 'ReceivedMessageFolder'), title, message, [r], sender, replyToReceiver, IReceivedMessage))
-        received = filter(None, received)
+        received = [_f for _f in received if _f]
         if len(received) and sender:
             sent = self._createMessage(self._getMessageFolder(sender, 'sent', 'SentMessageFolder'), title, message, receiver, sender, replyToSender, ISentMessage)
             if sent is not None:

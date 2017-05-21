@@ -11,7 +11,7 @@ imsdomain = PTSTranslationDomain('IMS')
 
 def initialize(context):
 
-    from content import message, message_folder
+    from .content import message, message_folder
 
     content_types, constructors, ftis = atapi.process_types(
         atapi.listTypes(config.PROJECTNAME),
